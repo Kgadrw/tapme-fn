@@ -358,11 +358,16 @@ export function ProfilePreview({
             <div className="flex items-start justify-between gap-2">
               <h1
                 className={cn(
-                  "min-w-0 font-semibold tracking-tight text-foreground",
+                  "flex min-w-0 items-center gap-1.5 font-semibold tracking-tight text-foreground",
                   compact ? "text-lg" : "text-xl sm:text-2xl",
                 )}
               >
-                {profile.fullName}
+                <span className="truncate">{profile.fullName}</span>
+                <img
+                  src="/verified.webp"
+                  alt="Verified"
+                  className={cn("shrink-0 object-contain", compact ? "h-4 w-4" : "h-5 w-5")}
+                />
               </h1>
               {onEditIdentity ? (
                 <button
