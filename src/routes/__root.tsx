@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { HeadContent, Outlet, Link, createRootRouteWithContext, useRouter } from "@tanstack/react-router";
+import { HeadContent, Outlet, createRootRouteWithContext, useRouter } from "@tanstack/react-router";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { useEffect } from "react";
 
