@@ -58,9 +58,11 @@ function SaveContactButton({
     setSaving(true);
     trackProfileEvent(analyticsSlug, { type: "contact_save" });
     try {
+      // Opens the device Contacts app with a new contact (name, email, socials, …)
       await saveContactToDevice(profile);
     } finally {
-      setSaving(false);
+      // Keep "Saving…" briefly so the handoff to Contacts feels intentional
+      window.setTimeout(() => setSaving(false), 600);
     }
   }
 
@@ -71,6 +73,7 @@ function SaveContactButton({
         void handleSaveContact();
       }}
       disabled={saving}
+      aria-label="Save contact to phone"
       className={cn(profileActionButtonClass, compact && "h-9 text-xs")}
     >
       <img
@@ -81,7 +84,7 @@ function SaveContactButton({
           compact ? "h-4 w-4" : "h-5 w-5",
         )}
       />
-      {saving ? "Saving…" : "Contact"}
+      {saving ? "Saving…" : "Save contact"}
     </button>
   );
 }
@@ -120,7 +123,8 @@ function ProfileActionButtons({
   compact?: boolean;
   analyticsSlug?: string;
 }) {
-  const showContact = Boolean(profile.phone || profile.email);
+  // Always offer save-to-contacts when there is a name (includes email, socials, username in the vCard)
+  const showContact = Boolean(profile.fullName?.trim() || profile.email || profile.phone || profile.socialLinks.length);
   const showPay = profile.paymentLinks.length > 0;
   const showCall = Boolean(profile.phone);
 
