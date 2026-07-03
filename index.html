@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="tapme is an NFC digital business card platform. Share contacts, socials, and business info instantly with a single tap."
+    />
+    <meta property="og:title" content="tapme | Share your profile with one tap." />
+    <meta
+      property="og:description"
+      content="NFC digital business cards. One tap to share everything."
+    />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/logo.png" type="image/png" />
+    <link rel="apple-touch-icon" href="/logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Elms+Sans:ital,wght@0,100..900;1,100..900&family=Google+Sans+Flex:opsz,wght@6..144,1..1000&display=swap"
+      rel="stylesheet"
+    />
+    <title>tapme | Share your profile with one tap.</title>
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem("tapme-theme") || "system";
+          var systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+          var isDark = stored === "dark" || (stored === "system" && systemDark);
+          var root = document.documentElement;
+          root.classList.toggle("dark", isDark);
+          root.style.colorScheme = isDark ? "dark" : "light";
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
