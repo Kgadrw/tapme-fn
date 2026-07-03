@@ -9,6 +9,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { openPaymentUrl } from "@/lib/open-link";
 import {
   copyPaymentValue,
   getMobileMoneyDialHref,
@@ -119,14 +120,19 @@ function PaymentLinkGridCard({
     );
   }
 
-  // Payment URL: open in new tab
+  // Payment URL: try native app (e.g. PayPal), else browser
+  const paymentHref = getPaymentUrlHref(link.value);
   return (
     <a
-      href={getPaymentUrlHref(link.value)}
+      href={paymentHref}
       target="_blank"
       rel="noreferrer"
       className={className}
-      onClick={() => onLinkClick?.(link.label)}
+      onClick={(event) => {
+        event.preventDefault();
+        onLinkClick?.(link.label);
+        openPaymentUrl(paymentHref);
+      }}
     >
       {content}
     </a>

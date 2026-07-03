@@ -7,6 +7,7 @@ import { recordProfileEvent } from "@/lib/analytics-api";
 import { type UserProfile } from "@/lib/profile";
 import type { BusinessOffer } from "@/lib/business";
 import { encodeSocialLogoPath } from "@/lib/social-platforms";
+import { openSocialLink } from "@/lib/open-link";
 import { saveContactToDevice } from "@/lib/vcard";
 import { cn } from "@/lib/utils";
 
@@ -236,7 +237,11 @@ function SocialLinkButton({
       target="_blank"
       rel="noreferrer"
       aria-label={label}
-      onClick={() => trackProfileEvent(analyticsSlug, { type: "link_click", linkLabel: label })}
+      onClick={(event) => {
+        event.preventDefault();
+        trackProfileEvent(analyticsSlug, { type: "link_click", linkLabel: label });
+        openSocialLink(platformId, href);
+      }}
       className="inline-flex shrink-0 items-center justify-center transition-opacity hover:opacity-70"
     >
       <SocialPlatformLogo
