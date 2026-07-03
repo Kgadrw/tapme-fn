@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import {
   copyPaymentValue,
+  getMobileMoneyDialHref,
   getPaymentLinkLogo,
   getPaymentUrlHref,
   type PaymentLink,
@@ -37,9 +38,8 @@ function PaymentLinkIcon({
 }) {
   const logo = getPaymentLinkLogo(link);
   const Icon = paymentIcons[link.type] ?? Wallet;
-  const isCopyType = link.type === "bank_account" || link.type === "mobile_money";
 
-  if (copied && isCopyType) {
+  if (copied && link.type === "bank_account") {
     return <Check className={compact ? "h-5 w-5" : "h-6 w-6"} />;
   }
 
@@ -67,9 +67,8 @@ function PaymentLinkGridCard({
   onLinkClick?: (label: string) => void;
 }) {
   const [copied, setCopied] = useState(false);
-  const isCopyType = link.type === "bank_account" || link.type === "mobile_money";
 
-  async function handleCopy() {
+  async function handleCopyAccount() {
     const success = await copyPaymentValue(link.value);
     if (!success) return;
     onLinkClick?.(link.label);
@@ -88,7 +87,7 @@ function PaymentLinkGridCard({
         <PaymentLinkIcon link={link} copied={copied} compact={compact} />
       </span>
       <span className={cn("font-medium text-foreground", compact ? "text-[11px]" : "text-xs")}>
-        {link.label}
+        {copied && link.type === "bank_account" ? "Copied" : link.label}
       </span>
     </>
   );
@@ -98,14 +97,29 @@ function PaymentLinkGridCard({
     compact ? "gap-1 px-2 py-2.5" : "gap-1.5 px-3 py-3.5",
   );
 
-  if (isCopyType) {
+  // MTN / Airtel: open the phone dialer with the USSD code
+  if (link.type === "mobile_money") {
     return (
-      <button type="button" onClick={handleCopy} className={className}>
+      <a
+        href={getMobileMoneyDialHref(link.value, link)}
+        className={className}
+        onClick={() => onLinkClick?.(link.label)}
+      >
+        {content}
+      </a>
+    );
+  }
+
+  // Bank: copy account number
+  if (link.type === "bank_account") {
+    return (
+      <button type="button" onClick={handleCopyAccount} className={className}>
         {content}
       </button>
     );
   }
 
+  // Payment URL: open in new tab
   return (
     <a
       href={getPaymentUrlHref(link.value)}

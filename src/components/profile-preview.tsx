@@ -1,4 +1,5 @@
 import { Camera, MapPin, Pencil, Trash2 } from "lucide-react";
+import { useState } from "react";
 
 import { PaymentPayButton } from "@/components/payment-links-grid";
 import { SocialPlatformLogo } from "@/components/social-platform-select";
@@ -6,7 +7,7 @@ import { recordProfileEvent } from "@/lib/analytics-api";
 import { type UserProfile } from "@/lib/profile";
 import type { BusinessOffer } from "@/lib/business";
 import { encodeSocialLogoPath } from "@/lib/social-platforms";
-import { downloadVCard } from "@/lib/vcard";
+import { saveContactToDevice } from "@/lib/vcard";
 import { cn } from "@/lib/utils";
 
 const contactIcons = {
@@ -49,13 +50,26 @@ function SaveContactButton({
   compact?: boolean;
   analyticsSlug?: string;
 }) {
+  const [saving, setSaving] = useState(false);
+
+  async function handleSaveContact() {
+    if (saving) return;
+    setSaving(true);
+    trackProfileEvent(analyticsSlug, { type: "contact_save" });
+    try {
+      await saveContactToDevice(profile);
+    } finally {
+      setSaving(false);
+    }
+  }
+
   return (
     <button
       type="button"
       onClick={() => {
-        trackProfileEvent(analyticsSlug, { type: "contact_save" });
-        downloadVCard(profile);
+        void handleSaveContact();
       }}
+      disabled={saving}
       className={cn(profileActionButtonClass, compact && "h-9 text-xs")}
     >
       <img
@@ -66,7 +80,7 @@ function SaveContactButton({
           compact ? "h-4 w-4" : "h-5 w-5",
         )}
       />
-      Contact
+      {saving ? "Saving…" : "Contact"}
     </button>
   );
 }

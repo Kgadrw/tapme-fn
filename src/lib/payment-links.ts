@@ -57,6 +57,11 @@ function getUssdProvider(link: Pick<PaymentLink, "providerId" | "provider">) {
   return "mtn";
 }
 
+/** Rwanda phone numbers are 10 digits (e.g. 0788123456). Anything else is treated as a merchant code. */
+export function isMobileMoneyPhoneNumber(value: string) {
+  return normalizeDigits(value).length === 10;
+}
+
 export function buildMobileMoneyUssd(
   phone: string,
   providerOrLink: string | Pick<PaymentLink, "providerId" | "provider"> = "mtn",
@@ -68,10 +73,15 @@ export function buildMobileMoneyUssd(
       : getUssdProvider(providerOrLink);
 
   if (provider === "airtel") {
-    return `*185*1*1*${digits}#`;
+    return `*182*1*2*${digits}#`;
   }
 
-  return `*182*1*1*${digits}#`;
+  // MTN: 10-digit phone → send money; otherwise merchant code payment
+  if (digits.length === 10) {
+    return `*182*1*1*${digits}#`;
+  }
+
+  return `*182*8*1*${digits}#`;
 }
 
 export function getMobileMoneyDialHref(
@@ -86,10 +96,13 @@ export function getPaymentUrlHref(url: string) {
   return url.startsWith("http") ? url : `https://${url}`;
 }
 
-export function getPaymentLinkActionLabel(type: PaymentLinkType) {
+export function getPaymentLinkActionLabel(type: PaymentLinkType, link?: PaymentLink) {
   switch (type) {
     case "mobile_money":
-      return "Send money";
+      if (link && getUssdProvider(link) === "mtn" && !isMobileMoneyPhoneNumber(link.value)) {
+        return "Pay merchant";
+      }
+      return "Pay";
     case "bank_account":
       return "Copy account";
     case "payment_url":
