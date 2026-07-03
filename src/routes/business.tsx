@@ -4,17 +4,31 @@ import { Building2, Users, Gift, Layers } from "lucide-react";
 import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
 import { BUSINESS_BENEFITS } from "@/lib/business";
+import { marketingSeo } from "@/lib/seo";
 
 export const Route = createFileRoute("/business")({
-  head: () => ({
-    meta: [
-      { title: "For Business — tapme" },
-      {
-        name: "description",
-        content: "Request team profiles and manage your company on tapme with a customized business offer.",
-      },
-    ],
-  }),
+  head: () =>
+    marketingSeo({
+      title: "For Business",
+      description:
+        "Request team profiles and manage your company on tapme with a customized business offer — NFC cards for your whole team.",
+      path: "/business",
+      keywords: "tapme business, team NFC cards, company digital profiles, corporate business cards Rwanda",
+      breadcrumbs: [
+        { name: "Home", path: "/" },
+        { name: "For Business", path: "/business" },
+      ],
+      extraSchemas: [
+        {
+          "@context": "https://schema.org",
+          "@type": "Service",
+          name: "tapme for Business",
+          provider: { "@type": "Organization", name: "tapme" },
+          description: "Team digital profiles and NFC business cards for companies.",
+          areaServed: { "@type": "Country", name: "Rwanda" },
+        },
+      ],
+    }),
   component: BusinessPage,
 });
 

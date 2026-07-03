@@ -1,0 +1,5 @@
+# Public profile pages — https://me.tapme.rw
+User-agent: *
+Allow: /
+
+Sitemap: https://tapme.rw/api/seo/profiles-sitemap.xml

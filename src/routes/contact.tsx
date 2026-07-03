@@ -7,17 +7,22 @@ import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
 import { Spinner } from "@/components/spinner";
 import { submitContactMessage } from "@/lib/contact-api";
+import { buildLocalBusinessSchema, marketingSeo } from "@/lib/seo";
 
 export const Route = createFileRoute("/contact")({
-  head: () => ({
-    meta: [
-      { title: "Contact Us — tapme" },
-      {
-        name: "description",
-        content: "Get in touch with the tapme team for support, business inquiries, or general questions.",
-      },
-    ],
-  }),
+  head: () =>
+    marketingSeo({
+      title: "Contact",
+      description:
+        "Get in touch with the tapme team for support, business inquiries, or general questions about NFC digital business cards.",
+      path: "/contact",
+      keywords: "contact tapme, tapme support, business inquiry, digital business card help",
+      breadcrumbs: [
+        { name: "Home", path: "/" },
+        { name: "Contact", path: "/contact" },
+      ],
+      extraSchemas: [buildLocalBusinessSchema()],
+    }),
   component: ContactPage,
 });
 

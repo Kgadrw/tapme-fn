@@ -4,17 +4,21 @@ import { Smartphone, ScanLine, UserPlus, Share2 } from "lucide-react";
 import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
 import { RegisterButton } from "@/components/register-button";
+import { marketingSeo } from "@/lib/seo";
 
 export const Route = createFileRoute("/how-it-works")({
-  head: () => ({
-    meta: [
-      { title: "How it works — tapme" },
-      {
-        name: "description",
-        content: "Learn how tapme turns a single NFC tap into an instantly shareable digital profile.",
-      },
-    ],
-  }),
+  head: () =>
+    marketingSeo({
+      title: "How it works",
+      description:
+        "Learn how tapme turns a single NFC tap into an instantly shareable digital profile — no app required for visitors.",
+      path: "/how-it-works",
+      keywords: "how tapme works, NFC tap, digital business card, share profile, smart card",
+      breadcrumbs: [
+        { name: "Home", path: "/" },
+        { name: "How it works", path: "/how-it-works" },
+      ],
+    }),
   component: HowItWorksPage,
 });
 

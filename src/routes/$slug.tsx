@@ -2,8 +2,6 @@ import { createFileRoute, notFound, redirect } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 
 import { ProfilePreview } from "@/components/profile-preview";
-import { Spinner } from "@/components/spinner";
-import { usePublicProfile } from "@/context/profile-context";
 import type { BusinessOffer } from "@/lib/business";
 import { getPublicBusinessOffer } from "@/lib/business-api";
 import { recordProfileEvent } from "@/lib/analytics-api";
@@ -13,6 +11,8 @@ import {
   isSubdomainRoutingEnabled,
   RESERVED_PROFILE_SLUGS,
 } from "@/lib/domains";
+import { getPublicProfile } from "@/lib/profile-api";
+import { buildProfileHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/$slug")({
   beforeLoad: ({ params }) => {
@@ -24,12 +24,24 @@ export const Route = createFileRoute("/$slug")({
       throw redirect({ href: getProfileUrl(params.slug), replace: true });
     }
   },
+  loader: async ({ params }) => {
+    try {
+      const profile = await getPublicProfile(params.slug);
+      return { profile };
+    } catch {
+      throw notFound();
+    }
+  },
+  head: ({ loaderData }) => {
+    if (!loaderData?.profile) return {};
+    return buildProfileHead(loaderData.profile, loaderData.profile.slug);
+  },
   component: PublicProfilePage,
 });
 
 function PublicProfilePage() {
   const { slug } = Route.useParams();
-  const { profile, loading } = usePublicProfile(slug);
+  const { profile } = Route.useLoaderData();
   const [businessOffer, setBusinessOffer] = useState<BusinessOffer | null>(null);
   const [businessCompanyName, setBusinessCompanyName] = useState<string>();
 
@@ -55,14 +67,6 @@ function PublicProfilePage() {
         setBusinessCompanyName(undefined);
       });
   }, [slug]);
-
-  if (loading) {
-    return (
-      <div className="flex min-h-dvh items-center justify-center bg-background">
-        <Spinner className="h-8 w-8" label="Loading profile" />
-      </div>
-    );
-  }
 
   if (!profile) throw notFound();
 

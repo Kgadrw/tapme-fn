@@ -8,19 +8,7 @@ import { RegisterButton } from "@/components/register-button";
 import { Spinner } from "@/components/spinner";
 import { formatPrice } from "@/lib/billing";
 import { useSubscriptionPlan } from "@/lib/use-subscription-plan";
-
-export const Route = createFileRoute("/pricing")({
-  head: () => ({
-    meta: [
-      { title: "Pricing — tapme" },
-      {
-        name: "description",
-        content: "Simple, transparent pricing for tapme. One plan with everything you need.",
-      },
-    ],
-  }),
-  component: PricingPage,
-});
+import { marketingSeo } from "@/lib/seo";
 
 const faqs = [
   {
@@ -36,6 +24,39 @@ const faqs = [
     a: "Payments are handled securely via mobile money (MTN MoMo and Airtel Money).",
   },
 ];
+
+export const Route = createFileRoute("/pricing")({
+  head: () =>
+    marketingSeo({
+      title: "Pricing",
+      description:
+        "Simple, transparent pricing for tapme. One plan with everything you need to build and share your digital profile.",
+      path: "/pricing",
+      keywords: "tapme pricing, digital business card cost, NFC card subscription, Rwanda mobile money",
+      breadcrumbs: [
+        { name: "Home", path: "/" },
+        { name: "Pricing", path: "/pricing" },
+      ],
+      faqs: faqs.map((faq) => ({ question: faq.q, answer: faq.a })),
+      extraSchemas: [
+        {
+          "@context": "https://schema.org",
+          "@type": "Product",
+          name: "tapme Pro",
+          description: "Full-featured digital profile with NFC sharing, analytics, and unlimited links.",
+          brand: { "@type": "Brand", name: "tapme" },
+          offers: {
+            "@type": "AggregateOffer",
+            priceCurrency: "RWF",
+            lowPrice: "0",
+            offerCount: "1",
+            availability: "https://schema.org/InStock",
+          },
+        },
+      ],
+    }),
+  component: PricingPage,
+});
 
 function PricingPage() {
   const { plan, loading } = useSubscriptionPlan();

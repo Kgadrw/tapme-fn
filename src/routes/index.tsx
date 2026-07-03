@@ -9,6 +9,13 @@ import { NfcCard } from "@/components/nfc-card";
 import { RegisterButton } from "@/components/register-button";
 import { getMarketingUrl, isDashboardHost, isSubdomainRoutingEnabled } from "@/lib/domains";
 import { bootstrapAuthFromUrl, isAuthenticated } from "@/lib/auth-store";
+import {
+  buildOrganizationSchema,
+  buildSoftwareApplicationSchema,
+  buildWebSiteSchema,
+  marketingSeo,
+  SEO,
+} from "@/lib/seo";
 
 export const Route = createFileRoute("/")({
   beforeLoad: () => {
@@ -17,9 +24,13 @@ export const Route = createFileRoute("/")({
       throw redirect({ href: getMarketingUrl("/register"), replace: true });
     }
   },
-  head: () => ({
-    meta: [{ title: "tapme | Share your profile with one tap." }],
-  }),
+  head: () =>
+    marketingSeo({
+      title: `${SEO.siteName} | ${SEO.tagline}`,
+      description: SEO.defaultDescription,
+      path: "/",
+      extraSchemas: [buildOrganizationSchema(), buildWebSiteSchema(), buildSoftwareApplicationSchema()],
+    }),
   component: Index,
 });
 

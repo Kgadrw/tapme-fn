@@ -14,18 +14,22 @@ import {
 import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
 import { RegisterButton } from "@/components/register-button";
+import { marketingSeo } from "@/lib/seo";
 
 export const Route = createFileRoute("/features")({
-  head: () => ({
-    meta: [
-      { title: "Features — tapme" },
-      {
-        name: "description",
-        content:
-          "Everything tapme gives you: a live digital profile, unlimited links, analytics, QR codes, payments, and more.",
-      },
-    ],
-  }),
+  head: () =>
+    marketingSeo({
+      title: "Features",
+      description:
+        "Everything tapme gives you: a live digital profile, unlimited social and payment links, NFC & QR sharing, analytics, vCard downloads, and more.",
+      path: "/features",
+      keywords:
+        "tapme features, digital profile links, NFC card, QR profile, profile analytics, vCard, payment links",
+      breadcrumbs: [
+        { name: "Home", path: "/" },
+        { name: "Features", path: "/features" },
+      ],
+    }),
   component: FeaturesPage,
 });
 

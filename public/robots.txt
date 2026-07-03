@@ -1,0 +1,17 @@
+# tapme — https://tapme.rw
+User-agent: *
+Allow: /
+
+# Private app areas (user dashboard & auth)
+Disallow: /billing
+Disallow: /settings
+Disallow: /register
+Disallow: /signin
+Disallow: /business/dashboard
+
+# Crawl-delay not needed for modern bots
+
+Sitemap: https://tapme.rw/sitemap-index.xml
+
+# Public profiles: https://me.tapme.rw/{username}
+# Profile sitemap: https://tapme.rw/api/seo/profiles-sitemap.xml

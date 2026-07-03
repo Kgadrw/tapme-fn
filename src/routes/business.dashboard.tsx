@@ -1,14 +1,10 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 
 import { BusinessDashboardSidebar } from "@/components/business-dashboard-sidebar";
+import { noIndexHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/business/dashboard")({
-  head: () => ({
-    meta: [
-      { title: "Business Dashboard — tapme" },
-      { name: "description", content: "Manage team profiles and your business offer on tapme." },
-    ],
-  }),
+  head: () => noIndexHead("Business Dashboard"),
   component: BusinessDashboardLayout,
 });
 

@@ -4,6 +4,7 @@ import { DashboardGate } from "@/components/dashboard-gate";
 import { DashboardPageShell } from "@/components/dashboard-page-shell";
 import { getDashboardUrl, getMarketingUrl, isDashboardHost, isSubdomainRoutingEnabled } from "@/lib/domains";
 import { bootstrapAuthFromUrl, isAuthenticated } from "@/lib/auth-store";
+import { noIndexHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/_dashboard")({
   beforeLoad: ({ location }) => {
@@ -15,12 +16,7 @@ export const Route = createFileRoute("/_dashboard")({
       throw redirect({ href: getMarketingUrl("/register"), replace: true });
     }
   },
-  head: () => ({
-    meta: [
-      { title: "Dashboard — tapme" },
-      { name: "description", content: "Manage your tapme digital profile." },
-    ],
-  }),
+  head: () => noIndexHead("Dashboard"),
   component: DashboardLayout,
 });
 
