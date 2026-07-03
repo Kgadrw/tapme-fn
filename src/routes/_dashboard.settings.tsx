@@ -180,9 +180,18 @@ function UsernameSection() {
               </label>
               <p className="text-xs text-muted-foreground">
                 Profile link:{" "}
-                <span className="font-medium text-foreground">
-                  {normalizedUsername ? getProfileUrl(normalizedUsername) : "—"}
-                </span>
+                {normalizedUsername ? (
+                  <a
+                    href={getProfileUrl(normalizedUsername)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-medium text-foreground underline-offset-2 hover:underline"
+                  >
+                    {getProfileUrl(normalizedUsername)}
+                  </a>
+                ) : (
+                  <span className="font-medium text-foreground">—</span>
+                )}
               </p>
 
               {!isAvailable && normalizedUsername ? (

@@ -11,6 +11,7 @@ import {
   isPublicProfileHost,
   isSubdomainRoutingEnabled,
   normalizeDashboardPath,
+  parseProfileSlugFromPath,
 } from "@/lib/domains";
 import { goToUrl } from "@/lib/navigation";
 
@@ -19,6 +20,20 @@ export function HostRouter() {
 
   useEffect(() => {
     if (!isSubdomainRoutingEnabled()) return;
+
+    const profileSlug = parseProfileSlugFromPath(pathname);
+
+    if (isPublicProfileHost()) {
+      if (pathname === "/") {
+        goToUrl(getMarketingUrl("/"), true);
+      }
+      return;
+    }
+
+    if (profileSlug && (isMarketingHost() || isDashboardHost())) {
+      goToUrl(getProfileUrl(profileSlug), true);
+      return;
+    }
 
     if (isDashboardHost()) {
       if (pathname.startsWith("/dashboard")) {
@@ -34,13 +49,6 @@ export function HostRouter() {
       if (pathname.startsWith("/u/")) {
         const slug = pathname.slice(3);
         if (slug) goToUrl(getProfileUrl(slug), true);
-      }
-      return;
-    }
-
-    if (isPublicProfileHost()) {
-      if (pathname === "/") {
-        goToUrl(getMarketingUrl("/"), true);
       }
       return;
     }

@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Building2, Link2, Pencil, Smartphone, Trash2 } from "lucide-react";
+import { Building2, ExternalLink, Link2, Pencil, Smartphone, Trash2 } from "lucide-react";
 import { useRef, useState, type ChangeEvent } from "react";
 import { toast } from "sonner";
 
@@ -25,6 +25,7 @@ import {
 } from "@/lib/payment-links";
 import { formatSocialUrlDisplay, getSocialLinkLogo } from "@/lib/social-platforms";
 import { removeAvatarImage, uploadAvatarImage, uploadImagePreview } from "@/lib/upload-api";
+import { getProfileUrl } from "@/lib/domains";
 
 export const Route = createFileRoute("/_dashboard/profile")({
   component: ProfilePage,
@@ -173,8 +174,17 @@ function ProfilePage() {
 
   return (
     <div className="animate-fade-in space-y-10">
-      <div className="flex items-center justify-between gap-4">
+      <div className="flex flex-wrap items-center justify-between gap-4">
         <h1 className="text-2xl font-medium tracking-tight text-foreground md:text-3xl">My Profile</h1>
+        <a
+          href={getProfileUrl(profile.slug)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex h-10 items-center gap-2 rounded-full border border-border px-4 text-sm font-medium text-foreground transition-colors hover:bg-secondary"
+        >
+          <ExternalLink className="h-4 w-4" />
+          View on me.tapme.rw
+        </a>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[420px_1fr] lg:items-start">

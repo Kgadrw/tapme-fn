@@ -61,7 +61,22 @@ export function getHostUrl(host: string, path = "/"): string {
 }
 
 export function getProfileUrl(slug: string): string {
-  return getHostUrl(domains.publicProfile, `/${slug}`);
+  const normalized = slug.trim().toLowerCase();
+  return getHostUrl(domains.publicProfile, `/${normalized}`);
+}
+
+export function normalizeProfileSlug(slug: string): string {
+  return slug.trim().toLowerCase();
+}
+
+/** Single-segment path like /kalisagad → slug, or null if reserved / not a profile path. */
+export function parseProfileSlugFromPath(pathname: string): string | null {
+  const match = pathname.match(/^\/([^/?#]+)\/?$/);
+  if (!match?.[1]) return null;
+
+  const slug = normalizeProfileSlug(match[1]);
+  if (!slug || RESERVED_PROFILE_SLUGS.has(slug)) return null;
+  return slug;
 }
 
 export function getDashboardUrl(path = "/"): string {

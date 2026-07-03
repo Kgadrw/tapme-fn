@@ -1,4 +1,4 @@
-import { getCurrentHost, getAdminDashboardUrl, getDashboardUrl, getMarketingUrl, isAdminDashboardHost, isDashboardHost } from "@/lib/domains";
+import { getCurrentHost, getAdminDashboardUrl, getDashboardUrl, getMarketingUrl, getProfileUrl, isAdminDashboardHost, isDashboardHost } from "@/lib/domains";
 import { withCrossHostAuth } from "@/lib/auth-store";
 
 export function goToUrl(url: string, replace = false): void {
@@ -27,4 +27,8 @@ export function goToMarketing(path = "/"): void {
     return;
   }
   goToUrl(url);
+}
+
+export function goToPublicProfile(slug: string, replace = false): void {
+  goToUrl(getProfileUrl(slug), replace);
 }

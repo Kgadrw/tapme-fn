@@ -9,6 +9,7 @@ import {
   getProfileUrl,
   isPublicProfileHost,
   isSubdomainRoutingEnabled,
+  normalizeProfileSlug,
   RESERVED_PROFILE_SLUGS,
 } from "@/lib/domains";
 import { getPublicProfile } from "@/lib/profile-api";
@@ -16,7 +17,7 @@ import { buildProfileHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/$slug")({
   beforeLoad: ({ params }) => {
-    const slug = params.slug.trim().toLowerCase();
+    const slug = normalizeProfileSlug(params.slug);
 
     if (RESERVED_PROFILE_SLUGS.has(slug)) {
       throw notFound();
@@ -27,7 +28,7 @@ export const Route = createFileRoute("/$slug")({
     }
   },
   loader: async ({ params }) => {
-    const slug = params.slug.trim().toLowerCase();
+    const slug = normalizeProfileSlug(params.slug);
     try {
       const profile = await getPublicProfile(slug);
       return { profile };
