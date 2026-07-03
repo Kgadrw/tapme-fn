@@ -38,11 +38,9 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   return payload.data;
 }
 
-/** Public read — no auth header so anyone can load profiles on me.tapme.rw. */
+/** Public read — no auth header; same-origin /api on me.tapme.rw. */
 async function publicRequest<T>(path: string): Promise<T> {
-  const response = await fetch(`${API_BASE}${path}`, {
-    headers: { "Content-Type": "application/json" },
-  });
+  const response = await fetch(`${API_BASE}${path}`);
 
   const payload = (await response.json()) as ApiSuccess<T> | ApiError;
   if (!response.ok || !payload.success) {

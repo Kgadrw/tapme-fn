@@ -1,16 +1,27 @@
 const protocol = import.meta.env.VITE_APP_PROTOCOL ?? (import.meta.env.DEV ? "http" : "https");
 
-const publicProfileHost =
-  import.meta.env.VITE_PUBLIC_PROFILE_HOST ?? (import.meta.env.DEV ? "me.localhost:8080" : "me.tapme.rw");
+function normalizeHost(host: string): string {
+  return host
+    .trim()
+    .replace(/^https?:\/\//i, "")
+    .replace(/\/$/, "");
+}
 
-const dashboardHost =
-  import.meta.env.VITE_DASHBOARD_HOST ?? (import.meta.env.DEV ? "profile.localhost:8080" : "profile.tapme.rw");
+const publicProfileHost = normalizeHost(
+  import.meta.env.VITE_PUBLIC_PROFILE_HOST ?? (import.meta.env.DEV ? "me.localhost:8080" : "me.tapme.rw"),
+);
 
-const adminDashboardHost =
-  import.meta.env.VITE_ADMIN_DASHBOARD_HOST ?? (import.meta.env.DEV ? "dash.localhost:8081" : "dash.tapme.rw");
+const dashboardHost = normalizeHost(
+  import.meta.env.VITE_DASHBOARD_HOST ?? (import.meta.env.DEV ? "profile.localhost:8080" : "profile.tapme.rw"),
+);
 
-const marketingHost =
-  import.meta.env.VITE_MARKETING_HOST ?? (import.meta.env.DEV ? "localhost:8080" : "tapme.rw");
+const adminDashboardHost = normalizeHost(
+  import.meta.env.VITE_ADMIN_DASHBOARD_HOST ?? (import.meta.env.DEV ? "dash.localhost:8081" : "dash.tapme.rw"),
+);
+
+const marketingHost = normalizeHost(
+  import.meta.env.VITE_MARKETING_HOST ?? (import.meta.env.DEV ? "localhost:8080" : "tapme.rw"),
+);
 
 export const domains = {
   publicProfile: publicProfileHost,
@@ -26,7 +37,7 @@ export function getCurrentHost(): string {
 }
 
 function hostsMatch(a: string, b: string): boolean {
-  return a.toLowerCase() === b.toLowerCase();
+  return normalizeHost(a).toLowerCase() === normalizeHost(b).toLowerCase();
 }
 
 export function isSubdomainRoutingEnabled(): boolean {
