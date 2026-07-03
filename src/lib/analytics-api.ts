@@ -1,7 +1,8 @@
+import { getApiBaseUrl } from "@/lib/api-base";
 import type { InsightPeriod, InsightPeriodData } from "@/lib/insights";
 import { getAuthToken } from "@/lib/auth-store";
 
-const API_BASE = import.meta.env.VITE_API_URL ?? "";
+const API_BASE = getApiBaseUrl();
 
 type ApiSuccess<T> = {
   success: true;
@@ -49,7 +50,7 @@ export function recordProfileEvent(
   slug: string,
   input: { type: "view" | "tap" | "contact_save" | "link_click"; linkLabel?: string },
 ) {
-  const API_BASE = import.meta.env.VITE_API_URL ?? "";
+  const API_BASE = getApiBaseUrl();
   const token = getAuthToken();
 
   return fetch(`${API_BASE}/api/profiles/${encodeURIComponent(slug)}/events`, {

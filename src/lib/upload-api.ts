@@ -1,7 +1,8 @@
 import type { UserProfile } from "@/lib/profile";
+import { getApiBaseUrl } from "@/lib/api-base";
 import { getAuthToken } from "@/lib/auth-store";
 
-const API_BASE = import.meta.env.VITE_API_URL ?? "";
+const API_BASE = getApiBaseUrl();
 
 type ApiSuccess<T> = {
   success: true;

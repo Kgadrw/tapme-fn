@@ -16,17 +16,20 @@ import { buildProfileHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/$slug")({
   beforeLoad: ({ params }) => {
-    if (RESERVED_PROFILE_SLUGS.has(params.slug)) {
+    const slug = params.slug.trim().toLowerCase();
+
+    if (RESERVED_PROFILE_SLUGS.has(slug)) {
       throw notFound();
     }
 
     if (isSubdomainRoutingEnabled() && !isPublicProfileHost()) {
-      throw redirect({ href: getProfileUrl(params.slug), replace: true });
+      throw redirect({ href: getProfileUrl(slug), replace: true });
     }
   },
   loader: async ({ params }) => {
+    const slug = params.slug.trim().toLowerCase();
     try {
-      const profile = await getPublicProfile(params.slug);
+      const profile = await getPublicProfile(slug);
       return { profile };
     } catch {
       throw notFound();
