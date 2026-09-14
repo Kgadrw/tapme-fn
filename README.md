@@ -1,33 +1,16 @@
-# tapme-fn
+# TapMe
 
-Frontend for [tapme](https://github.com/Kgadrw/tapme-fn) — digital profile app (marketing site, user dashboard, public profiles).
+Public website for TapMe — Rwanda NFC technology. Primary product: NFC payment stands/cards that start mobile-money payments. TapMe does not hold money or act as a wallet.
 
-## Setup
+## Stack
+
+Vite · React · TypeScript · Tailwind CSS
+
+## Scripts
 
 ```bash
 npm install
-```
-
-## Development
-
-```bash
-npm run dev
-```
-
-- Marketing: `http://localhost:8080`
-- User dashboard: `http://profile.localhost:8080`
-
-The dev server proxies `/api/*` to the backend (run the API separately).
-
-## Build
-
-```bash
+npm run dev      # http://localhost:8080
 npm run build
+npm run preview
 ```
-
-## Environment
-
-Copy `.env.example` to `.env` and set:
-
-- `VITE_API_URL` — API base URL (optional in dev; Vite proxies to `localhost:3001`)
-- `VITE_GOOGLE_CLIENT_ID` — Google OAuth client ID

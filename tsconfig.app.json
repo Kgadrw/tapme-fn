@@ -20,9 +20,8 @@
     "noUncheckedSideEffectImports": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
-      "@admin/*": ["./admin/*"]
+      "@/*": ["./src/*"]
     }
   },
-  "include": ["src", "admin"]
+  "include": ["src"]
 }

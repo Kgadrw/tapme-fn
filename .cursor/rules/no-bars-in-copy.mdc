@@ -1,0 +1,35 @@
+---
+description: Never use bars/dashes as separators in UI copy
+alwaysApply: true
+---
+
+# No bars between texts
+
+Never use visual "bars" or dash separators in user-facing copy.
+
+## Disallowed in UI text
+
+- Em dash: `—`
+- En dash used as a separator: `–`
+- Spaced hyphen as a clause break: ` - `
+- Pipe separators in prose: ` | `
+
+## Do instead
+
+Rewrite with commas, periods, or a new sentence.
+
+```tsx
+// ❌ BAD
+"It’s easy, secure, and private — and no extra hardware is needed."
+"Tap. Confirm. Done. — NFC payment stands…"
+
+// ✅ GOOD
+"It’s easy, secure, and private, and no extra hardware is needed."
+"Tap. Confirm. Done. NFC payment stands…"
+```
+
+## Notes
+
+- Arrow characters in CTAs like `→` are fine.
+- Hyphens inside compound words are fine (`mobile-money`, `near-field`).
+- Do not reintroduce bars when editing marketing, hero, feature, or footer copy.
