@@ -1,23 +1,26 @@
-import { BusinessStories } from "./components/BusinessStories";
-import { Faq } from "./components/Faq";
-import { HomeHero } from "./components/HomeHero";
-import { HowItWorks } from "./components/HowItWorks";
-import { Partners } from "./components/Partners";
-import { SiteFooter } from "./components/SiteFooter";
-import { SiteNav } from "./components/SiteNav";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { ScrollToTop } from "./components/ScrollToTop";
+import { SiteLayout } from "./components/SiteLayout";
+import { AboutPage } from "./pages/AboutPage";
+import { BusinessPage } from "./pages/BusinessPage";
+import { ContactPage } from "./pages/ContactPage";
+import { HomePage } from "./pages/HomePage";
+import { HowItWorksPage } from "./pages/HowItWorksPage";
 
 export default function App() {
   return (
-    <div className="min-h-dvh bg-tap-bg">
-      <SiteNav />
-      <main>
-        <HomeHero />
-        <HowItWorks />
-        <Faq />
-        <Partners />
-        <BusinessStories />
-      </main>
-      <SiteFooter />
-    </div>
+    <BrowserRouter>
+      <ScrollToTop />
+      <Routes>
+        <Route element={<SiteLayout />}>
+          <Route index element={<HomePage />} />
+          <Route path="how-it-works" element={<HowItWorksPage />} />
+          <Route path="business" element={<BusinessPage />} />
+          <Route path="about" element={<AboutPage />} />
+          <Route path="contact" element={<ContactPage />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }

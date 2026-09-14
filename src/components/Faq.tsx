@@ -1,4 +1,6 @@
+import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
+import { FadeUp } from "./motion";
 
 const faqs = [
   {
@@ -37,45 +39,54 @@ export function Faq() {
   return (
     <section id="faq" className="w-full bg-white">
       <div className="mx-auto w-full max-w-[820px] px-5 py-16 sm:px-8 sm:py-20 md:py-24">
-        <h2 className="text-center text-[36px] font-semibold tracking-tight text-tap-fg sm:text-[44px] md:text-[48px]">
-          Questions? Answers.
-        </h2>
+        <FadeUp>
+          <h2 className="text-center text-[36px] font-semibold tracking-tight text-tap-fg sm:text-[44px] md:text-[48px]">
+            Questions? Answers.
+          </h2>
+        </FadeUp>
 
         <ul className="mt-12 border-t border-black/10 sm:mt-14">
           {faqs.map((item, index) => {
             const isOpen = openIndex === index;
             return (
-              <li key={item.q} className="border-b border-black/10">
-                <button
-                  type="button"
-                  aria-expanded={isOpen}
-                  onClick={() => setOpenIndex(isOpen ? null : index)}
-                  className="flex w-full items-center justify-between gap-6 py-5 text-left sm:py-6"
-                >
-                  <span className="text-[17px] font-medium text-tap-fg sm:text-[19px] md:text-[21px]">
-                    {item.q}
-                  </span>
-                  <span
-                    className={`material-symbols-outlined shrink-0 text-[22px] text-tap-muted transition-transform duration-200 ${
-                      isOpen ? "rotate-180" : ""
-                    }`}
-                    aria-hidden
+              <FadeUp key={item.q} delay={index * 0.04}>
+                <li className="border-b border-black/10">
+                  <button
+                    type="button"
+                    aria-expanded={isOpen}
+                    onClick={() => setOpenIndex(isOpen ? null : index)}
+                    className="flex w-full items-center justify-between gap-6 py-5 text-left sm:py-6"
                   >
-                    expand_more
-                  </span>
-                </button>
-                <div
-                  className={`grid transition-[grid-template-rows] duration-200 ease-out ${
-                    isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
-                  }`}
-                >
-                  <div className="overflow-hidden">
-                    <p className="pb-5 pr-10 text-[15px] leading-relaxed text-tap-muted sm:pb-6 sm:text-[16px]">
-                      {item.a}
-                    </p>
-                  </div>
-                </div>
-              </li>
+                    <span className="text-[17px] font-medium text-tap-fg sm:text-[19px] md:text-[21px]">
+                      {item.q}
+                    </span>
+                    <motion.span
+                      className="material-symbols-outlined shrink-0 text-[22px] text-tap-muted"
+                      animate={{ rotate: isOpen ? 180 : 0 }}
+                      transition={{ duration: 0.25 }}
+                      aria-hidden
+                    >
+                      expand_more
+                    </motion.span>
+                  </button>
+                  <AnimatePresence initial={false}>
+                    {isOpen ? (
+                      <motion.div
+                        key="content"
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+                        className="overflow-hidden"
+                      >
+                        <p className="pb-5 pr-10 text-[15px] leading-relaxed text-tap-muted sm:pb-6 sm:text-[16px]">
+                          {item.a}
+                        </p>
+                      </motion.div>
+                    ) : null}
+                  </AnimatePresence>
+                </li>
+              </FadeUp>
             );
           })}
         </ul>
