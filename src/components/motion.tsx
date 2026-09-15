@@ -30,6 +30,50 @@ export const stagger = {
   },
 };
 
+export const staggerWords = {
+  hidden: {},
+  show: {
+    transition: {
+      staggerChildren: 0.055,
+      delayChildren: 0.08,
+    },
+  },
+};
+
+export const splitWord = {
+  hidden: { y: "115%", opacity: 0 },
+  show: {
+    y: 0,
+    opacity: 1,
+    transition: { duration: 0.75, ease },
+  },
+};
+
+type SplitTextProps = {
+  text: string;
+  className?: string;
+};
+
+export function SplitText({ text, className }: SplitTextProps) {
+  const words = text.split(" ");
+
+  return (
+    <span className={className}>
+      {words.map((word, index) => (
+        <span
+          key={`${word}-${index}`}
+          className="inline-block overflow-hidden align-bottom pb-[0.08em]"
+        >
+          <motion.span className="inline-block" variants={splitWord}>
+            {word}
+            {index < words.length - 1 ? "\u00A0" : ""}
+          </motion.span>
+        </span>
+      ))}
+    </span>
+  );
+}
+
 type FadeProps = {
   children: ReactNode;
   className?: string;

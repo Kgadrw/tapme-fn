@@ -55,7 +55,7 @@ export function Faq() {
                     type="button"
                     aria-expanded={isOpen}
                     onClick={() => setOpenIndex(isOpen ? null : index)}
-                    className="flex w-full items-center justify-between gap-6 py-5 text-left sm:py-6"
+                    className="flex w-full cursor-pointer items-center justify-between gap-6 py-5 text-left sm:py-6"
                   >
                     <span className="text-[17px] font-medium text-tap-fg sm:text-[19px] md:text-[21px]">
                       {item.q}

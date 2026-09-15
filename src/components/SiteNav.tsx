@@ -36,81 +36,92 @@ export function SiteNav() {
   }, [open]);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-black/[0.06] bg-white/72 backdrop-blur-xl backdrop-saturate-150">
-      <nav
-        aria-label="Global"
-        className="relative mx-auto flex h-12 max-w-[1200px] items-center justify-between gap-4 px-5 text-[12px] text-tap-fg/80 sm:h-12 sm:px-6 md:h-14 md:px-8 md:text-[14px]"
+    <>
+      <header
+        className={`sticky top-0 z-50 border-b border-black/[0.08] pt-[env(safe-area-inset-top)] ${
+          open
+            ? "bg-white"
+            : "bg-white/95 backdrop-blur-xl backdrop-saturate-150 md:bg-white/72"
+        }`}
       >
-        <Link
-          to="/"
-          aria-label="TapMe home"
-          className="relative z-20 shrink-0"
-          onClick={() => setOpen(false)}
+        <nav
+          aria-label="Global"
+          className="relative mx-auto flex h-14 max-w-[1200px] items-center justify-between gap-3 px-4 text-[14px] text-tap-fg sm:px-6 md:h-14 md:gap-4 md:px-8"
         >
-          <TapMeLogo size="md" />
-        </Link>
-
-        <ul className="hidden min-w-0 flex-1 items-center justify-center gap-x-8 md:flex lg:gap-x-9">
-          {links.map((item) => (
-            <li key={item.to}>
-              <NavLink
-                to={item.to}
-                className={({ isActive }) =>
-                  `whitespace-nowrap transition-opacity hover:opacity-100 ${
-                    isActive ? "text-tap-fg opacity-100" : "opacity-80"
-                  }`
-                }
-              >
-                {item.label}
-              </NavLink>
-            </li>
-          ))}
-        </ul>
-
-        <div className="relative z-20 flex shrink-0 items-center gap-3">
           <Link
-            to="/contact"
-            className="hidden items-center justify-center rounded-full bg-tap-link px-3.5 py-1.5 text-[12px] font-medium text-white transition-colors hover:bg-tap-link-hover md:inline-flex"
+            to="/"
+            aria-label="TapMe home"
+            className="relative z-20 flex shrink-0 items-center gap-2.5"
+            onClick={() => setOpen(false)}
           >
-            Order
+            <TapMeLogo size="sm" className="md:size-10" />
           </Link>
 
-          <button
-            type="button"
-            aria-label={open ? "Close menu" : "Open menu"}
-            aria-expanded={open}
-            aria-controls="mobile-nav"
-            onClick={() => setOpen((prev) => !prev)}
-            className="relative inline-flex h-10 w-10 items-center justify-center md:hidden"
-          >
-            <span className="sr-only">{open ? "Close" : "Menu"}</span>
-            <span
-              className={`absolute block h-px w-[17px] bg-tap-fg transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-                open ? "translate-y-0 rotate-45" : "-translate-y-[3.5px]"
-              }`}
-            />
-            <span
-              className={`absolute block h-px w-[17px] bg-tap-fg transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-                open ? "translate-y-0 -rotate-45" : "translate-y-[3.5px]"
-              }`}
-            />
-          </button>
-        </div>
-      </nav>
+          <ul className="hidden min-w-0 flex-1 items-center justify-center gap-x-8 md:flex lg:gap-x-9">
+            {links.map((item) => (
+              <li key={item.to}>
+                <NavLink
+                  to={item.to}
+                  className={({ isActive }) =>
+                    `whitespace-nowrap transition-opacity hover:opacity-100 ${
+                      isActive ? "text-tap-fg opacity-100" : "opacity-80"
+                    }`
+                  }
+                >
+                  {item.label}
+                </NavLink>
+              </li>
+            ))}
+          </ul>
+
+          <div className="relative z-20 flex shrink-0 items-center gap-2 sm:gap-3">
+            <Link
+              to="/contact"
+              className="hidden items-center justify-center rounded-full bg-tap-link px-3.5 py-1.5 text-[12px] font-medium text-white transition-colors hover:bg-tap-link-hover md:inline-flex"
+            >
+              Order
+            </Link>
+
+            <button
+              type="button"
+              aria-label={open ? "Close menu" : "Open menu"}
+              aria-expanded={open}
+              aria-controls="mobile-nav"
+              onClick={() => setOpen((prev) => !prev)}
+              className="relative -mr-1 inline-flex h-11 w-11 items-center justify-center rounded-full text-tap-fg md:hidden"
+            >
+              <span className="sr-only">{open ? "Close" : "Menu"}</span>
+              <span
+                className={`absolute block h-[1.5px] w-[18px] rounded-full bg-tap-fg transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                  open ? "translate-y-0 rotate-45" : "-translate-y-[4px]"
+                }`}
+              />
+              <span
+                className={`absolute block h-[1.5px] w-[18px] rounded-full bg-tap-fg transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                  open ? "translate-y-0 -rotate-45" : "translate-y-[4px]"
+                }`}
+              />
+            </button>
+          </div>
+        </nav>
+      </header>
 
       <AnimatePresence>
         {open ? (
           <motion.div
             id="mobile-nav"
             key="mobile-nav"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Menu"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 top-12 z-40 bg-white md:hidden"
+            className="fixed inset-x-0 bottom-0 top-[calc(3.5rem+env(safe-area-inset-top))] z-40 overflow-y-auto bg-white px-6 pb-[max(2.5rem,env(safe-area-inset-bottom))] pt-4 md:hidden"
           >
             <motion.ul
-              className="flex h-full flex-col gap-0 overflow-y-auto px-8 pb-10 pt-6"
+              className="flex flex-col"
               initial="hidden"
               animate="show"
               exit="hidden"
@@ -138,7 +149,7 @@ export function SiteNav() {
                     to={item.to}
                     onClick={() => setOpen(false)}
                     className={({ isActive }) =>
-                      `block py-4 text-[28px] font-semibold tracking-tight transition-opacity ${
+                      `block py-4 text-[28px] font-semibold tracking-tight ${
                         isActive ? "text-tap-fg" : "text-tap-fg/90"
                       }`
                     }
@@ -161,7 +172,7 @@ export function SiteNav() {
                 <Link
                   to="/contact"
                   onClick={() => setOpen(false)}
-                  className="inline-flex h-11 items-center justify-center rounded-full bg-tap-link px-6 text-[15px] font-medium text-white transition-colors hover:bg-tap-link-hover"
+                  className="inline-flex h-12 w-full items-center justify-center rounded-full bg-tap-link px-6 text-[16px] font-medium text-white transition-colors hover:bg-tap-link-hover"
                 >
                   Order
                 </Link>
@@ -170,6 +181,6 @@ export function SiteNav() {
           </motion.div>
         ) : null}
       </AnimatePresence>
-    </header>
+    </>
   );
 }

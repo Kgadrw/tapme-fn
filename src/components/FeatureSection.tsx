@@ -28,7 +28,7 @@ export function FeatureSection({
 
         <FadeUp delay={0.12}>
           <motion.div
-            className="relative mt-12 min-h-[420px] overflow-hidden rounded-[28px] bg-black sm:mt-14 sm:min-h-[480px] sm:rounded-[36px] md:mt-16 md:min-h-[560px] md:rounded-[44px]"
+            className="relative mt-12 min-h-[340px] overflow-hidden rounded-[28px] bg-black sm:mt-14 sm:min-h-[480px] sm:rounded-[36px] md:mt-16 md:min-h-[560px] md:rounded-[44px]"
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.2 }}
@@ -37,15 +37,15 @@ export function FeatureSection({
             <img
               src="/feature-map.png"
               alt=""
-              className="absolute inset-0 size-full object-cover object-center"
+              className="absolute inset-0 hidden size-full object-cover object-center sm:block"
             />
 
-            <div className="relative z-10 flex h-full min-h-[420px] items-start p-8 sm:min-h-[480px] sm:p-10 md:min-h-[560px] md:p-14 lg:p-16">
+            <div className="relative z-10 flex h-full min-h-[340px] items-start p-7 sm:min-h-[480px] sm:p-10 md:min-h-[560px] md:p-14 lg:p-16">
               <div className="max-w-[420px]">
-                <h2 className="text-[28px] font-semibold leading-[1.1] tracking-tight text-white sm:text-[32px] md:text-[40px]">
+                <h2 className="text-[26px] font-semibold leading-[1.1] tracking-tight text-white sm:text-[32px] md:text-[40px]">
                   {title}
                 </h2>
-                <p className="mt-4 text-[15px] leading-relaxed text-white/70 sm:text-[17px]">
+                <p className="mt-3 text-[14px] leading-relaxed text-white/70 sm:mt-4 sm:text-[17px]">
                   {body}
                 </p>
                 {cta ? (
