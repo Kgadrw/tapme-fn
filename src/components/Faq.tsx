@@ -29,7 +29,7 @@ const faqs = [
   },
   {
     q: "Where can I get more information?",
-    a: "Contact us at hello@tapme.rw or reach out on WhatsApp. We’re based in Kigali, Rwanda.",
+    a: "Contact us at kalisagad05@gmail.com or reach out on WhatsApp. We’re based in Kigali, Rwanda.",
   },
 ] as const;
 

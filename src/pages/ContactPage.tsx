@@ -37,7 +37,7 @@ export function ContactPage() {
       ].join("\n"),
     );
 
-    window.location.href = `mailto:hello@tapme.rw?subject=${subject}&body=${body}`;
+    window.location.href = `mailto:kalisagad05@gmail.com?subject=${subject}&body=${body}`;
     setSent(true);
   }
 
