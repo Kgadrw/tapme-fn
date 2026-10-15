@@ -10,80 +10,151 @@ const products = [
   "Not sure yet",
 ] as const;
 
+const apiBase = (import.meta.env.VITE_API_URL as string | undefined)?.replace(/\/$/, "") ?? "";
+
 export function ContactPage() {
   const [sent, setSent] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [product, setProduct] = useState<(typeof products)[number]>("TapMe Stand");
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (submitting) return;
+
     const form = event.currentTarget;
     const data = new FormData(form);
-    const name = String(data.get("name") ?? "").trim();
-    const business = String(data.get("business") ?? "").trim();
-    const phone = String(data.get("phone") ?? "").trim();
-    const email = String(data.get("email") ?? "").trim();
-    const message = String(data.get("message") ?? "").trim();
+    const payload = {
+      name: String(data.get("name") ?? "").trim(),
+      business: String(data.get("business") ?? "").trim(),
+      phone: String(data.get("phone") ?? "").trim(),
+      email: String(data.get("email") ?? "").trim(),
+      product,
+      message: String(data.get("message") ?? "").trim(),
+    };
 
-    const subject = encodeURIComponent(`TapMe order inquiry from ${business || name}`);
-    const body = encodeURIComponent(
-      [
-        `Name: ${name}`,
-        `Business: ${business}`,
-        `Phone: ${phone}`,
-        `Email: ${email}`,
-        `Product: ${product}`,
-        "",
-        message,
-      ].join("\n"),
-    );
+    setSubmitting(true);
+    setError(null);
 
-    window.location.href = `mailto:kalisagad05@gmail.com?subject=${subject}&body=${body}`;
-    setSent(true);
+    try {
+      let response: Response;
+      try {
+        response = await fetch(`${apiBase}/api/contact/order`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+      } catch {
+        throw new Error(
+          "Cannot reach the TapMe API. Make sure the backend is running on port 3001.",
+        );
+      }
+
+      const raw = await response.text();
+      type ContactOrderResult = {
+        success?: boolean;
+        error?: string | { message?: string };
+        data?: { message?: string };
+      };
+      let result: ContactOrderResult | null = null;
+      if (raw.trim()) {
+        try {
+          result = JSON.parse(raw) as ContactOrderResult;
+        } catch {
+          throw new Error(
+            response.status >= 500
+              ? "Cannot reach the TapMe API. Make sure the backend is running on port 3001."
+              : "Could not send your order. Please try again.",
+          );
+        }
+      }
+
+      if (!response.ok || result?.success === false) {
+        const apiError =
+          typeof result?.error === "string"
+            ? result.error
+            : result?.error && typeof result.error === "object"
+              ? result.error.message
+              : undefined;
+        throw new Error(
+          apiError ||
+            (response.status >= 500
+              ? "Cannot reach the TapMe API. Make sure the backend is running on port 3001."
+              : "Could not send your order. Please try again."),
+        );
+      }
+
+      setSent(true);
+      form.reset();
+      setProduct("TapMe Stand");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Could not send your order. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
     <div className="bg-white">
       <PageHero
         title="Contact"
-        subtitle="Tell us about your business. We’ll help you order and configure TapMe."
+        subtitle="Tell us about your business. We'll help you order and configure TapMe."
       />
 
       <section className="mx-auto max-w-[560px] px-5 pb-20 sm:px-8 sm:pb-24">
         <FadeUp>
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <Field label="Full name" name="name" required />
-            <Field label="Business name" name="business" required />
-            <Field label="Phone" name="phone" type="tel" required />
-            <Field label="Email" name="email" type="email" />
-            <ProductSelect value={product} onChange={setProduct} />
-            <div>
-              <label htmlFor="message" className="block text-[13px] text-tap-muted">
-                Message
-              </label>
-              <textarea
-                id="message"
-                name="message"
-                rows={4}
-                placeholder="Payment receiving number, quantity, location…"
-                className="mt-1.5 w-full resize-y rounded-xl border border-black/10 bg-white px-4 py-3 text-[15px] text-tap-fg outline-none transition focus:border-tap-link"
-              />
-            </div>
-
-            <div className="flex flex-col items-center pt-2">
+          {sent ? (
+            <div className="rounded-[24px] bg-tap-bg px-6 py-10 text-center sm:px-8">
+              <h2 className="text-[24px] font-semibold tracking-tight text-tap-fg sm:text-[28px]">
+                Order received
+              </h2>
+              <p className="mx-auto mt-3 max-w-[36ch] text-[15px] leading-relaxed text-tap-muted sm:text-[16px]">
+                Thanks for reaching out. We emailed you a confirmation. Our team will follow up
+                soon with the next steps.
+              </p>
               <button
-                type="submit"
-                className="inline-flex h-12 items-center justify-center rounded-full bg-tap-fg px-7 text-[15px] font-medium text-white transition-opacity hover:opacity-85"
+                type="button"
+                onClick={() => setSent(false)}
+                className="mt-6 text-[15px] text-tap-link transition-colors hover:text-tap-link-hover"
               >
-                Send inquiry
+                Send another inquiry
               </button>
-
-              {sent ? (
-                <p className="mt-3 text-center text-[14px] text-tap-muted">
-                  Opening your email app to send the inquiry…
-                </p>
-              ) : null}
             </div>
-          </form>
+          ) : (
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <Field label="Full name" name="name" required />
+              <Field label="Business name" name="business" required />
+              <Field label="Phone" name="phone" type="tel" required />
+              <Field label="Email" name="email" type="email" required />
+              <ProductSelect value={product} onChange={setProduct} />
+              <div>
+                <label htmlFor="message" className="block text-[13px] text-tap-muted">
+                  Message
+                </label>
+                <textarea
+                  id="message"
+                  name="message"
+                  rows={4}
+                  placeholder="Payment receiving number, quantity, location…"
+                  className="mt-1.5 w-full resize-y rounded-xl border border-black/10 bg-white px-4 py-3 text-[15px] text-tap-fg outline-none transition focus:border-tap-link"
+                />
+              </div>
+
+              <div className="flex flex-col items-center pt-2">
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="inline-flex h-12 items-center justify-center rounded-full bg-tap-fg px-7 text-[15px] font-medium text-white transition-opacity hover:opacity-85 disabled:cursor-not-allowed disabled:opacity-55"
+                >
+                  {submitting ? "Sending…" : "Send inquiry"}
+                </button>
+
+                {error ? (
+                  <p className="mt-3 text-center text-[14px] text-red-600">{error}</p>
+                ) : null}
+              </div>
+            </form>
+          )}
         </FadeUp>
       </section>
     </div>

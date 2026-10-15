@@ -101,7 +101,7 @@ export function AboutPage() {
                           {person.name}
                         </h3>
                         <span
-                          className="material-symbols-outlined mt-1 hidden shrink-0 text-[20px] leading-none text-[#0066cc] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] [-webkit-text-stroke:0.6px_white] [paint-order:stroke_fill] [font-variation-settings:'FILL'_1,'wght'_700,'GRAD'_200,'opsz'_24] sm:inline-block sm:rotate-[60deg] sm:group-hover:rotate-[-120deg] md:text-[22px]"
+                          className="material-symbols-outlined mt-1 hidden shrink-0 text-[20px] leading-none text-[#0066cc] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] [font-variation-settings:'FILL'_1,'wght'_700,'GRAD'_200,'opsz'_24] sm:inline-block sm:rotate-[60deg] sm:group-hover:rotate-[-120deg] md:text-[22px]"
                           aria-hidden
                         >
                           arrow_upward
