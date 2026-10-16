@@ -40,7 +40,7 @@ export function BusinessDashboardSidebar() {
       </a>
       {items.map((item) => {
         const Icon = item.icon;
-        const active = isActive(item.to, "exact" in item ? item.exact : undefined);
+        const active = isActive(item.to, "exact" in item ? item.exact === true : undefined);
         return (
           <Link
             key={item.to}
